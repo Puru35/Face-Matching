@@ -15,7 +15,11 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.urls import path
+
+from fm_app.views import Trial
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    path('trial', Trial.as_view(), "trial")
 ]
