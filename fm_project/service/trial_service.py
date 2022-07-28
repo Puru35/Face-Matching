@@ -40,7 +40,7 @@ class TrialService:
         return:
             next_trial_data: the required info for the next trial -> dict
         """
-        path = Path(__file__).parent / f"../../trial_images/{self.next_trial_no}"
+        path = Path(__file__).parent / f"..{os.sep}..{os.sep}trial_images{os.sep}{self.next_trial_no}"
         image_name_list = os.listdir(path)
         correct_image_name = ""
         for filename in image_name_list:
