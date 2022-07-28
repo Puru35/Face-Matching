@@ -1,3 +1,5 @@
+import json
+
 from django.views import View
 from django.http.response import JsonResponse
 
@@ -12,8 +14,8 @@ class Trial(View):
     """
 
     def post(self, request):
-        trial_no = request.POST.get("trial_no", None)
-        trial_service = TrialService(request.POST, trial_no)
+        trial_no = json.loads(request.body.decode("utf-8")).get("trial_no", None)
+        trial_service = TrialService(json.loads(request.body.decode("utf-8")), trial_no)
         if trial_no:
             trial_service.process_trial_data()
         return JsonResponse(

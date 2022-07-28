@@ -2,6 +2,8 @@
 This file conatains the processing part of the trial
 """
 import os
+import json
+from pathlib import Path
 
 
 class TrialService:
@@ -27,7 +29,7 @@ class TrialService:
         """
         if not self.trial_no:
             return "T1"
-        return f"T{int(self.trial_no[1:])+1}"
+        return f"T{int(self.trial_no[1:]) + 1}"
 
     def get_next_trial_data(self):
         """
@@ -38,7 +40,8 @@ class TrialService:
         return:
             next_trial_data: the required info for the next trial -> dict
         """
-        image_name_list = os.listdir(f"../../trial_images/{self.next_trial_no}")
+        path = Path(__file__).parent / f"../../trial_images/{self.next_trial_no}"
+        image_name_list = os.listdir(path)
         correct_image_name = ""
         for filename in image_name_list:
             if len(filename.split(".")[0]) is 3:
@@ -82,3 +85,31 @@ class TrialService:
         """
         This method saves the trial data to the respective file of the user
         """
+        json_filename = f"{self.name}.json"
+        trial_data = {
+            'trial_no': self.trial_no,
+            'trial_type': self.trial_type,
+            'correct_image': self.correct_image,
+            'image_selected': self.image_selected,
+            'is_correct': self.is_correct,
+            'time_taken': self.time_taken
+        }
+        try:
+            with open(json_filename) as f:
+                data = f.read()
+                if data:
+                    data = json.loads(data)
+            existing_trial_data = data.get(self.name)
+            existing_trial_data.append(trial_data)
+            final_data = {
+                self.name: existing_trial_data
+            }
+        except FileNotFoundError as ex:
+            final_data = {
+                self.name: [trial_data]
+            }
+        with open(json_filename, "w") as f:
+            f.write(json.dumps(final_data))
+
+
+
