@@ -10,11 +10,21 @@ class TrialService:
     and return the required information of the next trial
     """
     def __init__(self, data=None, trial_no=None):
+        self.name = data.get("name", "")
         self.data = data
         self.trial_no = trial_no
+        self.time_taken = None
+        self.image_selected = ""
+        self.correct_image = ""
+        self.is_correct = 0
+        self.trial_type = ""
+        self.total_score = ""
         self.next_trial_no = self.next_trial_number()
 
     def next_trial_number(self):
+        """
+        This method creates the next trial number based on the current trial
+        """
         if not self.trial_no:
             return "T1"
         return f"T{int(self.trial_no[1:])+1}"
@@ -36,5 +46,39 @@ class TrialService:
                 break
         return {
             correct_image_name: image_name_list,
-            "trial_no": self.next_trial_no
+            "trial_no": self.next_trial_no,
+            "name": self.name
         }
+
+    def get_trial_type(self):
+        """
+        This method extracts the trial type based on the trial number
+        """
+        split_trial_number = int(self.trial_no[1:])
+        if split_trial_number in range(1, 11):
+            self.trial_type = "Unmasked to Unmasked"
+        elif split_trial_number in range(11, 21):
+            self.trial_type = "Masked to Masked"
+        else:
+            self.trial_type = "Unmasked to Masked"
+
+    def process_trial_data(self):
+        """
+        This method process the data for each trial,
+        and saves the data in a csv file.
+        """
+        self.image_selected = self.data.get("image_selected")
+        self.time_taken = self.data.get("time_taken")
+        image_name, extension = self.image_selected.split(".")
+        if len(image_name) is 3:
+            self.is_correct = 1
+            self.correct_image = self.image_selected
+        else:
+            self.correct_image = f"{image_name[:-1]}.{extension}"
+        self.get_trial_type()
+        self.save_trial_data()
+
+    def save_trial_data(self):
+        """
+        This method saves the trial data to the respective file of the user
+        """

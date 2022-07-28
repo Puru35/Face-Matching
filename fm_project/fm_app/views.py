@@ -12,7 +12,10 @@ class Trial(View):
     """
 
     def post(self, request):
-        trial_service = TrialService(request.POST, request.POST.get("trial_no", None))
+        trial_no = request.POST.get("trial_no", None)
+        trial_service = TrialService(request.POST, trial_no)
+        if trial_no:
+            trial_service.process_trial_data()
         return JsonResponse(
             trial_service.get_next_trial_data(),
             status=200
