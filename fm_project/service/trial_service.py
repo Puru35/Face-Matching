@@ -85,7 +85,8 @@ class TrialService:
         """
         This method saves the trial data to the respective file of the user
         """
-        json_filename = f"{self.name}.json"
+
+        json_filename = Path(__file__).parent /f"..{os.sep}..{os.sep}json_data{os.sep}{self.name}.json"
         trial_data = {
             'trial_no': self.trial_no,
             'trial_type': self.trial_type,
