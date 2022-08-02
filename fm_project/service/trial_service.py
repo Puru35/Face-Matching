@@ -4,7 +4,7 @@ This file conatains the processing part of the trial
 import os
 import json
 from pathlib import Path
-
+import random
 
 class TrialService:
     """
@@ -45,13 +45,15 @@ class TrialService:
         path = Path(
             __file__).parent / f"..{os.sep}..{os.sep}trial_images{os.sep}{self.next_trial_no}"
         image_name_list = os.listdir(path)
+        random.shuffle(image_name_list)
         correct_image_name = ""
         for filename in image_name_list:
             if len(filename.split(".")[0]) is 3:
                 correct_image_name = filename
                 break
         return {
-            correct_image_name: image_name_list,
+            "correct_image": correct_image_name,
+            "images": image_name_list,
             "trial_no": self.next_trial_no,
             "name": self.name
         }
