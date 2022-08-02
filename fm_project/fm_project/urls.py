@@ -21,5 +21,5 @@ from fm_app.views import Trial
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    path('trial', Trial.as_view(), "trial")
+    path('trial', Trial.as_view(), name="trial")
 ]

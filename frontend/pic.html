@@ -1,0 +1,40 @@
+<html>
+    <body id="body">
+        <meta http-equiv="refresh" content="5; URL=./blank.html" />
+    </body>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        var data = JSON.parse(localStorage.getItem('trial_data'));
+        var correct_image = data["correct_image"];
+        var trial = data["trial_no"];
+
+        var src = "../trial_images/" + trial + "/" + correct_image
+
+        console.log(src)
+
+        const $image = $('<input/>')
+			.attr('type', 'image')
+            .attr('src', src)
+            .attr('id', 'correct_image')
+            .attr('style', 'height: 400; width: 400;')
+        $('#body').append($image)
+
+        $('#correct_image').css('position','absolute');
+        if(trial == "T1"){
+            $('#correct_image').css('top', '50%');
+		    $('#correct_image').css('left', '50%');
+            $('#correct_image').css('transform', 'translate(-50%, -50%)')
+        }else{
+            pic_height = screen.height - document.getElementById('correct_image').offsetHeight
+            pic_width = screen.width - document.getElementById('correct_image').offsetWidth
+
+            randPosY = Math.floor(Math.random() * pic_height * 0.6)
+            randPosX = Math.floor(Math.random() * pic_width * 0.8)
+
+            $('#correct_image').css('top', randPosY);
+            $('#correct_image').css('left', randPosX);
+        }
+
+    </script>
+</html>
