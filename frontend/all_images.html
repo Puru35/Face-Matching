@@ -6,7 +6,6 @@
   padding: 15px;
 }
 
-/* Clear floats after image containers */
 .row::after {
   content: "";
   clear: both;
@@ -16,47 +15,78 @@
     <center>
     <div class="row">
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1.JPG" id="img1" name="submit" width="300" height="300" alt="img1"/>
         </div>
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1a.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1a.JPG" id="img2" name="submit" width="300" height="300" alt="img2"/>
         </div>
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1b.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1b.JPG" id="img3" name="submit" width="300" height="300" alt="img3"/>
         </div>
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1c.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1c.JPG" id="img4" name="submit" width="300" height="300" alt="img4"/>
         </div>
     </div>
     <div class="row">
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1d.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1d.JPG" id="img5" name="submit" width="300" height="300" alt="img5"/>
         </div>
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1e.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1e.JPG" id="img6" name="submit" width="300" height="300" alt="img6"/>
         </div>
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1f.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1f.JPG" id="img7" name="submit" width="300" height="300" alt="img7"/>
         </div>
         <div class="column">
-            <a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-                <input type="image" src="C:\Users\achyu\Desktop\New folder\images\uu1g.jpg" name="submit" width="300" height="300" alt="submit"/>
-            </a>
+                <img src="./images/uu1g.JPG" id="img8" name="submit" width="300" height="300" alt="img8"/>
         </div>
     </div>
     </center>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="jquery.redirect.js"></script>
+    <script type="text/javascript">
+        var data = JSON.parse(localStorage.getItem('trial_data'));
+        var trial = data["trial_no"];
+        var images = data["images"]
+
+        document.getElementById('img1').src = "../trial_images/" + trial + "/" + images[0];
+        document.getElementById('img2').src = "../trial_images/" + trial + "/" + images[1];
+        document.getElementById('img3').src = "../trial_images/" + trial + "/" + images[2];
+        document.getElementById('img4').src = "../trial_images/" + trial + "/" + images[3];
+        document.getElementById('img5').src = "../trial_images/" + trial + "/" + images[4];
+        document.getElementById('img6').src = "../trial_images/" + trial + "/" + images[5];
+        document.getElementById('img7').src = "../trial_images/" + trial + "/" + images[6];
+        document.getElementById('img8').src = "../trial_images/" + trial + "/" + images[7];
+
+        document.addEventListener('click', function(event) {
+            var end_time = Date.now()
+            var img_id = event.target.id;
+            console.log(img_id)
+            let image_src = document.getElementById(img_id).src
+            console.log(image_src)
+            const image_name = image_src.split("/").at(-1)
+            console.log(image_name)
+
+            $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:8002/trial",
+                    data: JSON.stringify({
+                        "trial_no": trial,
+                        "image_selected": image_name,
+                        "name": data["name"],
+                        "time_taken": end_time - localStorage.getItem('start_time') - 3000
+                    }),
+                    success: function(response) {
+                        localStorage.setItem('trial_data', JSON.stringify(response));
+                        if (trial == "T30"){
+                            window.location = "./thanks.html";
+                        }
+                        else{
+                            window.location = "./plus.html";
+                        }
+                    }
+                });
+        });
+    </script>
 </html>

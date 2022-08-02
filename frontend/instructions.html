@@ -1,16 +1,41 @@
 <html>
-<h1><center> Instructions </center></h1>
+    <head>
+        <h1 style="font-size: 50px;"> Instructions </h1>
 
-<div>
-<body background="C:\Users\achyu\Desktop\New folder\images\rohan.jpeg">
-    <marquee>
-    Go fuck yourself
-    </marquee>
-</body>
-<p align="center">
-<a href="C:\Users\achyu\Desktop\New folder\plus_page.html">
-<button type="button" align="center">Start test</button>
-</a>
-</p>
-</div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="jquery.redirect.js"></script>
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+            $("#submit_name").click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "http://127.0.0.1:8002/trial",
+                    data: JSON.stringify({
+                        "name": $("#name").val()
+                    }),
+                    success: function(response) {
+                        localStorage.setItem('trial_data', JSON.stringify(response));
+                        window.location = "./plus.html";
+                    }
+                });
+            });
+        });
+
+        </script>
+    <body>
+        
+        </div>
+        <div>
+            <h4>Lorem Ipsum</h4>
+        </div>
+        <div>
+            <form name="get_name" method="POST">
+                <label for="name">Name: </label><br>
+                <input type="text" id="name" name="name"><br>
+                <input type="submit" id= "submit_name" value="Submit">
+            </form>
+        </div>
+    </body>
 </html>
