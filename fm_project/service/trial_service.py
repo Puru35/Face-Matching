@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import random
 
+
 class TrialService:
     """
     In this class, we will process the data of the incoming trial,
@@ -40,19 +41,26 @@ class TrialService:
         return:
             next_trial_data: the required info for the next trial -> dict
         """
-        if self.trial_no == "T30":
+        if self.trial_no == "T40":
             return {"message": "Test completed"}
         path = Path(
             __file__).parent / f"..{os.sep}..{os.sep}trial_images{os.sep}{self.next_trial_no}"
         image_name_list = os.listdir(path)
         random.shuffle(image_name_list)
         correct_image_name = ""
+        display_image = ""
         for filename in image_name_list:
-            if len(filename.split(".")[0]) is 3:
+            if "correct" in filename.split("-")[0]:
                 correct_image_name = filename
-                break
+                continue
+            if filename.split(".")[0][-1].isdigit():
+                display_image = filename
+        if correct_image_name:
+            # For Trials with 8 images, correct_image_name does not exist. But for trials with 9 images, correct_image_name exists
+            image_name_list.remove(display_image)
         return {
-            "correct_image": correct_image_name,
+            "display_image": display_image,
+            # "correct_image": correct_image_name if correct_image_name else display_image,
             "images": image_name_list,
             "trial_no": self.next_trial_no,
             "name": self.name
@@ -67,8 +75,10 @@ class TrialService:
             self.trial_type = "Unmasked to Unmasked"
         elif split_trial_number in range(11, 21):
             self.trial_type = "Masked to Masked"
-        else:
+        elif split_trial_number in range(21, 31):
             self.trial_type = "Unmasked to Masked"
+        else:
+            self.trial_type = "Masked to Unmasked"
 
     def process_trial_data(self):
         """
@@ -78,7 +88,7 @@ class TrialService:
         self.image_selected = self.data.get("image_selected")
         self.time_taken = self.data.get("time_taken")
         image_name, extension = self.image_selected.split(".")
-        if len(image_name) is 3:
+        if image_name[-1].isdigit():
             self.is_correct = 1
             self.correct_image = self.image_selected
         else:
@@ -89,7 +99,7 @@ class TrialService:
             self.save_trial_data(cumulative_score)
         else:
             self.save_trial_data()
-        if self.trial_no == "T30":
+        if self.trial_no == "T40":
             self.json_to_csv()
 
     def save_trial_data(self, cumulative_score=None):
