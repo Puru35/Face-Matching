@@ -1,6 +1,6 @@
-<html style="background-color: #030927 ;">
+<html style="background-color: #FFFFFF ;">
     <body id="body">
-        <meta http-equiv="refresh" content="5; URL=./blank.html" />
+        <meta http-equiv="refresh" content="3; URL=./blank.html" />
     </body>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -17,24 +17,13 @@
 			.attr('type', 'image')
             .attr('src', src)
             .attr('id', 'display_image')
-            .attr('style', 'height: 400; width: 400; cursor: default;')
+            .attr('style', 'height: 250; width: 250; cursor: default;')
         $('#body').append($image)
 
         $('#display_image').css('position','absolute');
-        if(trial == "T1"){
-            $('#display_image').css('top', '50%');
-		    $('#display_image').css('left', '50%');
-            $('#display_image').css('transform', 'translate(-50%, -50%)')
-        }else{
-            pic_height = screen.height - document.getElementById('display_image').offsetHeight
-            pic_width = screen.width - document.getElementById('display_image').offsetWidth
-
-            randPosY = Math.floor(Math.random() * pic_height * 0.6)
-            randPosX = Math.floor(Math.random() * pic_width * 0.8)
-
-            $('#display_image').css('top', randPosY);
-            $('#display_image').css('left', randPosX);
-        }
+        $('#display_image').css('top', '50%');
+        $('#display_image').css('left', '50%');
+        $('#display_image').css('transform', 'translate(-50%, -50%)')
 
     </script>
 </html>
